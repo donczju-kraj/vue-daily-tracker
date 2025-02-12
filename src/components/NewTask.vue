@@ -16,12 +16,13 @@ import { ref, defineEmits } from 'vue';
 
 const emit = defineEmits(['task-added']);
 
+const newTaskTitle = ref('');
+
 const addTask = () => {
   if(newTaskTitle.value.trim() !== '') {
     emit('task-added', newTaskTitle.value.trim());
     newTaskTitle.value = '';
   }
 }
-const newTaskTitle = ref('');
 
 </script>

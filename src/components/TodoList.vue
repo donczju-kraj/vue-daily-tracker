@@ -4,7 +4,7 @@
     <NewTask @task-added="addTask" />
     <ul>
       <li v-for="task in tasks" :key="task.id">
-        <Task :task="task" @task-updated="updateTask" />
+        <Task :task="task" @task-updated="updateTask" @task-removed="removeTask"/>
       </li>
     </ul>
   </div>
@@ -32,7 +32,6 @@ const addTask = (newTask) => {
       title: newTask.trim(),
       completed: false
     });
-    newTaskTitle.value = '';
   }
 };
 
@@ -42,6 +41,13 @@ const updateTask = (updatedTask) => {
     tasks.value.splice(index, 1, updatedTask);
   }
 };
+
+const removeTask = (taskId) => {
+  const index = tasks.value.findIndex(task => task.id === taskId);
+  if (index !== -1) {
+    tasks.value.splice(index, 1)
+  };
+}
 </script>
 
 <style scoped>
