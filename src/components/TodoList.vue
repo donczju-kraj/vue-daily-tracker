@@ -1,10 +1,7 @@
 <template>
   <div class="p-4 border border-gray-200 rounded-3xl">
     <h2 class="border-b border-gray-200 text-xl font-semibold mb-6">Your to-do list for {{ day }}</h2>
-    <div>
-      <input class="" type="text" v-model="newTaskTitle" placeholder="Dodaj nowe zadanie">
-      <button @click="addTask">Dodaj</button>
-    </div>
+    <NewTask @task-added="addTask" />
     <ul>
       <li v-for="task in tasks" :key="task.id">
         <Task :task="task" @task-updated="updateTask" />
@@ -15,6 +12,7 @@
 
 <script setup lang="ts">
 import { defineProps, ref } from 'vue';
+import NewTask from './NewTask.vue';
 import Task from './Task.vue';
 
 const props = defineProps<{
@@ -26,13 +24,12 @@ const tasks = ref([
   { id: 2, title: 'Ugotować obiad', completed: true }
 ]);
 
-const newTaskTitle = ref('');
 
-const addTask = () => {
-  if (newTaskTitle.value.trim() !== '') {
+const addTask = (newTask) => {
+  if (newTask.trim() !== '') {
     tasks.value.push({
       id: Date.now(),
-      title: newTaskTitle.value.trim(),
+      title: newTask.trim(),
       completed: false
     });
     newTaskTitle.value = '';
