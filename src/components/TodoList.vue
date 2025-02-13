@@ -17,13 +17,16 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from 'vue';
+import { computed } from 'vue';
+
+import { useTaskStore } from './stores/taskStore';
 import NewTask from './NewTask.vue';
 import Task from './Task.vue';
 
-const props = defineProps<{
-  day: string;
-}>();
+const taskStore = useTaskStore();
+
+const day = computed(() => taskStore.currentDay);
+const tasks = computed(() => taskStore.getTasksForCurrentDay);
 
 interface Task {
   id: number,
@@ -31,41 +34,22 @@ interface Task {
   completed: boolean,
 }
 
-const tasks = ref([
-  { id: 1, title: 'Buy groceries', completed: false },
-  { id: 2, title: 'Prepare dinner', completed: true }
-]);
-
 
 const addTask = (newTask: string) => {
   if (newTask.trim() !== '') {
-    tasks.value.push({
-      id: Date.now(),
-      title: newTask.trim(),
-      completed: false
-    });
+    taskStore.addTask(newTask);
   }
 };
 
 const updateTask = (updatedTask: Task) => {
-  const index = tasks.value.findIndex(task => task.id === updatedTask.id);
-  if (index !== -1) {
-    tasks.value.splice(index, 1, updatedTask);
-  }
+  taskStore.updateTask(updatedTask);
 };
 
 const removeTask = (taskId: number) => {
-  const index = tasks.value.findIndex(task => task.id === taskId);
-  if (index !== -1) {
-    tasks.value.splice(index, 1)
-  };
+  taskStore.removeTask(taskId);
 }
 
 const removeCompletedTasks = () => {
-  tasks.value = tasks.value.filter(task => !task.completed);
+  taskStore.removeCompletedTasks();
 }
 </script>
-
-<style scoped>
-/* Dodaj style dla komponentu TodoList */
-</style>

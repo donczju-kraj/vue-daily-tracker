@@ -10,7 +10,10 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, watch } from 'vue';
+import { defineProps, ref, watch } from 'vue';
+import { useTaskStore } from './stores/taskStore';
+
+const taskStore = useTaskStore();
 
 const props = defineProps<{
   task: {
@@ -20,20 +23,11 @@ const props = defineProps<{
   };
 }>();
 
-const emit = defineEmits(['task-updated', 'task-removed']);
-
 const completed = ref(props.task.completed);
 
 watch(completed, (newValue) => {
-  emit('task-updated', { ...props.task, completed: newValue });
+  taskStore.updateTask({ ...props.task, completed: newValue });
 });
 
-const removeTask = () => {
-  emit('task-removed', props.task.id);
-}
+const removeTask = () => taskStore.removeTask(props.task.id);
 </script>
-
-
-<style scoped>
-/* Dodaj style dla komponentu Task */
-</style>

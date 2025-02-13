@@ -8,7 +8,11 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+
+import { useTaskStore } from './stores/taskStore';
 import Button from './commons/Button.vue';
+
+const taskStore = useTaskStore();
 
 const currentDay = ref(new Date());
 
@@ -16,15 +20,14 @@ const currentDayFormatted = computed(() => {
   return currentDay.value.toLocaleDateString();
 });
 
-const emit = defineEmits(['day-changed']);
 
 const prevDay = () => {
   currentDay.value = new Date(currentDay.value.setDate(currentDay.value.getDate() - 1));
-  emit('day-changed', new Date(currentDay.value));
+  taskStore.setCurrentDate(currentDay.value.toLocaleDateString())
 };
 
 const nextDay = () => {
-  currentDay.value = new Date(currentDay.value.setDate(currentDay.value.getDate() + 1));
-  emit('day-changed', new Date(currentDay.value));
+  currentDay.value = new Date(currentDay.value.setDate(currentDay.value.getDate() - 1));
+  taskStore.setCurrentDate(currentDay.value.toLocaleDateString())
 };
 </script>
