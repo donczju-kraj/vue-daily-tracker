@@ -1,25 +1,22 @@
 <script setup lang="ts">
 import TodoList from './components/TodoList.vue';
-import Task from './components/Task.vue';
 import DayPicker from './components/DayPicker.vue';
-import HelloWorld from './components/HelloWorld.vue';
+import Products from './components/products/Products.vue';
 
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
 const currentDay = ref(new Date());
-const currentDayFormatted = computed(() => {
-    return currentDay.value.toLocaleDateString(); // Formatowanie daty
-});
 
-const updateCurrentDay = (newDay) => {
+const updateCurrentDay = (newDay: Date) => {
   currentDay.value = newDay;
 };
 </script>
 
 <template>
-  <!-- <HelloWorld msg="Vite + Vue" /> -->
   <TodoList :day="currentDay.toLocaleDateString()" />
-  <DayPicker @day-changed="updateCurrentDay"/>
+  <DayPicker @day-changed="updateCurrentDay" />
+  <hr class="ruler" />
+  <Products />
 </template>
 
 <style scoped>
@@ -29,10 +26,17 @@ const updateCurrentDay = (newDay) => {
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+
+.ruler {
+  margin: 20px 0px;
+  color: green;
 }
 </style>
